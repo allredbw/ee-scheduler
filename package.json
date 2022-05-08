@@ -1,0 +1,9 @@
+{
+  "name": "ndvi",
+  "version": "1.0.0",
+  "description": "16-day NDVI",
+  "main": "function.js",
+  "dependencies": {
+    "@google/earthengine": "^0.1.253"
+  }
+}
