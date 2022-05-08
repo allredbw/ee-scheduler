@@ -10,7 +10,7 @@ Executing operations with consistent frequency is a common task in many satellit
 #### Earth Engine
 [Earth Engine](https://earthengine.google.com/) is Google's geospatial platform for earth science data and analysis. 16-day Landsat NDVI was prototyped in the [Earth Engine code editor](https://code.earthengine.google.com/356caedb05a6c7505a6faaf98ac99e29?noload=true). Landsat 8 and 9 were used; pixels were bilinearly resampled; and cloudy and saturated pixels were masked. NDVI can be calculated for any given region, year, and day of year: `ndviComposite(region, year, doy)`.
 
-*Note:* There is no attempt to fill in missing pixels due to clouds or missing Landsat scenes. 
+*Note:* There is no attempt to fill in pixels due to clouds or missing Landsat scenes. 
 
 #### Cloud Functions
 [Cloud Functions](https://cloud.google.com/functions) is a serverless environment for connecting cloud services. In this case, Cloud Functions can be used to execute Earth Engine code. 
@@ -38,16 +38,16 @@ Necessary files:
 #### Putting it all together
 The [gcloud CLI](https://cloud.google.com/sdk/gcloud) can be used to put all the pieces together.
 
-Set the default cloud project  
+Set the default cloud project.  
 `gcloud config set project PROJECT-NAME`
 
-Create the Pub/Sub topic  
+Create the Pub/Sub topic.  
 `gcloud pubsub topics create TOPIC-NAME`
 
-Deploy and subscribe the function to the Pub/Sub topic  
+Deploy and subscribe the function to the Pub/Sub topic.  
 `gcloud functions deploy FUNCTION-NAME --trigger-topic TOPIC-NAME --runtime nodejs12 --timeout=120`
 
-Create the Cloud Scheduler job to invoke the Pub/Sub trigger. The job will be run every day at 10:00 Central time. The cloud function itself will determine if the NDVI composite will be created. A message body is required. 
+Create the Cloud Scheduler job to invoke the Pub/Sub trigger. The job will be run every day at 10:00 Central time. The cloud function itself will determine if the NDVI composite will be created. A message body is required.  
 `gcloud scheduler jobs create pubsub JOB-NAME --schedule="0 10 * * *" --topic=TOPIC-NAME --time-zone=America/Chicago --message-body="execute"`
 
 Manually run the Cloud Scheduler job.  
